@@ -21,7 +21,7 @@ class _HSDConvFloat0:
 
     @staticmethod
     def fromhsd(txt):
-        return float(txt)
+        return eval(txt)
 
     @staticmethod
     def tohsd(value):
