@@ -85,7 +85,7 @@ contains
     !  do ii=0,max_l
     !    do jj=0,max_l
     !      j(ii,:,:,jj,:,:)=j(ii,:,:,jj,:,:)/&
-    !         &((2.0d0*float(ii)+1.0d0)*(2.0d0*float(jj)+1.0d0))
+    !         &((2.0d0*dble(ii)+1.0d0)*(2.0d0*dble(jj)+1.0d0))
     !    end do
     !  end do
 
@@ -222,7 +222,7 @@ contains
     !  do ii=0,max_l
     !    do jj=0,max_l
     !      k(ii,:,:,jj,:,:)=k(ii,:,:,jj,:,:)/&
-    !         &((2.0d0*float(ii)+1.0d0)*(2.0d0*float(jj)+1.0d0))
+    !         &((2.0d0*dble(ii)+1.0d0)*(2.0d0*dble(jj)+1.0d0))
     !    end do
     !  end do
 
@@ -304,7 +304,7 @@ contains
     real(dp) :: almn
 
     almn=a(lambda+mu-nu)*a(lambda-mu+nu)*a(mu-lambda+nu)/&
-        &(float(lambda+mu+nu+1)*a(lambda+mu+nu))
+        &(dble(lambda+mu+nu+1)*a(lambda+mu+nu))
 
   end function almn
 

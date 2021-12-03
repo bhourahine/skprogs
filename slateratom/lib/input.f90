@@ -273,7 +273,7 @@ contains
     end do
     alpha(1)=min_alpha
     if (num_alpha==1) return
-    f=(max_alpha/alpha(1))**(1.0d0/FLOAT((num_alpha-1)))
+    f=(max_alpha/alpha(1))**(1.0d0/DBLE((num_alpha-1)))
     do ii=1,(num_alpha-1)
       alpha(1+ii)=alpha(ii)*f
     end do
