@@ -5,7 +5,7 @@ module dft
   use common_constants
   use density
   use integration
-  use xc_f90_lib_m
+  use xc_f03_lib_m
 
   implicit none
   private
@@ -67,8 +67,8 @@ contains
     real(dp) :: rhotot,rhodiff,drhotot,ddrhotot,drhodiff,ddrhodiff
     integer :: ii,jj,kk,ll,mm,oo
     integer(c_size_t) :: nn
-    type(xc_f90_func_t) :: xcfunc_x, xcfunc_c
-    type(xc_f90_func_info_t) :: xcinfo
+    type(xc_f03_func_t) :: xcfunc_x, xcfunc_c
+    type(xc_f03_func_info_t) :: xcinfo
     real(dp), allocatable :: tmprho(:,:), ex(:), ec(:), vx(:,:), vc(:,:)
     real(dp), allocatable :: tmpsigma(:,:), vxsigma(:,:), vcsigma(:,:)
     real(dp), allocatable :: tmpv(:), tmpv2(:)
@@ -78,15 +78,15 @@ contains
 
     if (xcnr==0) return
     if (xcnr == 2) then
-      call xc_f90_func_init(xcfunc_x, XC_LDA_X, XC_POLARIZED)
-      xcinfo = xc_f90_func_get_info(xcfunc_x)
-      call xc_f90_func_init(xcfunc_c, XC_LDA_C_PW, XC_POLARIZED)
-      xcinfo = xc_f90_func_get_info(xcfunc_x)
+      call xc_f03_func_init(xcfunc_x, XC_LDA_X, XC_POLARIZED)
+      xcinfo = xc_f03_func_get_info(xcfunc_x)
+      call xc_f03_func_init(xcfunc_c, XC_LDA_C_PW, XC_POLARIZED)
+      xcinfo = xc_f03_func_get_info(xcfunc_x)
     elseif (xcnr == 3) then
-      call xc_f90_func_init(xcfunc_x, XC_GGA_X_PBE, XC_POLARIZED)
-      xcinfo = xc_f90_func_get_info(xcfunc_x)
-      call xc_f90_func_init(xcfunc_c, XC_GGA_C_PBE, XC_POLARIZED)
-      xcinfo = xc_f90_func_get_info(xcfunc_x)
+      call xc_f03_func_init(xcfunc_x, XC_GGA_X_PBE, XC_POLARIZED)
+      xcinfo = xc_f03_func_get_info(xcfunc_x)
+      call xc_f03_func_init(xcfunc_c, XC_GGA_C_PBE, XC_POLARIZED)
+      xcinfo = xc_f03_func_get_info(xcfunc_x)
     end if
 
     do ii=1,num_mesh_points
@@ -145,8 +145,8 @@ contains
       allocate(vx(2, nn))
       allocate(vc(2, nn))
       tmprho(:,:) = transpose(rho) * rec4pi
-      call xc_f90_lda_exc_vxc(xcfunc_x, nn, tmprho(1,1), ex(1), vx(1,1))
-      call xc_f90_lda_exc_vxc(xcfunc_c, nn, tmprho(1,1), ec(1), vc(1,1))
+      call xc_f03_lda_exc_vxc(xcfunc_x, nn, tmprho(1,1), ex(1), vx(1,1))
+      call xc_f03_lda_exc_vxc(xcfunc_c, nn, tmprho(1,1), ec(1), vc(1,1))
       vxc(:,:) = transpose(vx + vc)
       exc = ec + ex
 !!! OLD hand coded XC version
@@ -173,9 +173,9 @@ contains
       tmpsigma(1,:) = drho(:,1) * drho(:,1) * rec4pi * rec4pi
       tmpsigma(2,:) = drho(:,1) * drho(:,2) * rec4pi * rec4pi
       tmpsigma(3,:) = drho(:,2) * drho(:,2) * rec4pi * rec4pi
-      call xc_f90_gga_exc_vxc(xcfunc_x, nn, tmprho(1,1), tmpsigma(1,1),&
+      call xc_f03_gga_exc_vxc(xcfunc_x, nn, tmprho(1,1), tmpsigma(1,1),&
           & ex(1), vx(1,1), vxsigma(1,1))
-      call xc_f90_gga_exc_vxc(xcfunc_c, nn, tmprho(1,1), tmpsigma(1,1), ec(1), &
+      call xc_f03_gga_exc_vxc(xcfunc_c, nn, tmprho(1,1), tmpsigma(1,1), ec(1), &
           &vc(1,1), vcsigma(1,1))
       vxc = transpose(vx + vc)
       do ispin = 1, 2
@@ -212,8 +212,8 @@ contains
     end if
 
 
-    call xc_f90_func_end(xcfunc_x)
-    call xc_f90_func_end(xcfunc_c)
+    call xc_f03_func_end(xcfunc_x)
+    call xc_f03_func_end(xcfunc_c)
 
   end subroutine density_grid
 
